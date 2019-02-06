@@ -5,6 +5,7 @@ module.exports = (app) => {
     var router = Router();
     router
         .get('/:id', productController.getById)
+        .get('/', productController.getById)
         .post('/', productController.create);
 
     app.all('/api/*', require('./middleware/auth'), require('./middleware/databaseContext'));

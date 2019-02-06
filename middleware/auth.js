@@ -3,7 +3,7 @@ var handleError = require('../middleware/handleError');
 var tokenConf = require('../config/token');
 
 var validateToken = (req, res, next) => {
-    var token = req.headers['Authorization'];
+    var token = req.headers['authorization'];
     if (!token) {
         return res.status(401).send({
             auth: false,
@@ -13,14 +13,14 @@ var validateToken = (req, res, next) => {
 
     try {
         var decoded = jwt.verify(token, tokenConf.secret);
-        if (decoded.exp <= Date.now()) {
+        if (Date.now() <= decoded.exp) {
             return res.status(401).send({
                 auth: false,
-                message: 'No token expired'
+                message: 'Token expired'
             })
         }
 
-        req.tenant = token.tenant;
+        req.tenant = decoded.family_name;
         next();
     } catch (error) {
         handleError(req, res, err);

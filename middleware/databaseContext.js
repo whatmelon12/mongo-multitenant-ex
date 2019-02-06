@@ -14,6 +14,11 @@ var createDbContext = (req, res, next) => {
         );
     
         req.dbContext = dbContext;
+
+        dbContext.on('connected', () => console.log(`Connected to ${tenant} successfully`));
+        dbContext.on('disconnected', () => console.log(`Disconnected from ${tenant} successfully`));
+        dbContext.on('error', (error) => handleError(req, res, {error, message: `Failed to connect tenant: ${tenant}`}));
+
         next();
     } catch(error) {
         handleError(req, req, error);

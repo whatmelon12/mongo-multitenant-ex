@@ -4,6 +4,9 @@ function ProductsService(context) {
     this.Model = context.model('Products', schema);
 
     this.getById = function(id) {
+        if(!id) {
+            return this.Model.find({});
+        }
         return this.Model.findById(id);
     }
 
